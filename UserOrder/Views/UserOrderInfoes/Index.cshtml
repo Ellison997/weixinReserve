@@ -1,0 +1,95 @@
+﻿@model UserOrder.Models.Order
+@using UserOrder.Models;
+
+@{
+    ViewBag.Title = "预定";
+    UserOrderInfo uoi = (UserOrderInfo)ViewData["uoi"];
+    String uname = (String)Session["uname"];
+    bool ifAdmin = (bool)ViewData["ifAdmin"];
+}
+<div class="container" id="container">
+    <div class="page panel js_show">
+        @if (uoi != null)
+        {
+            if (@uoi.State == "已预订")
+            {
+                <div class="weui-msg">
+                    <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+                    <div class="weui-msg__text-area">
+                        <h2 class="weui-msg__title">预约成功</h2>
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="weui-msg">
+                    <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+                    <div class="weui-msg__text-area">
+                        <h2 class="weui-msg__title">取消成功</h2>
+
+                    </div>
+                </div>
+            }
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_text">
+                    <h4 class="weui-media-box__title">@uoi.UName 您好！状态：@uoi.State</h4>
+                    <h4 class="weui-media-box__title">@uoi.Order.OrderDate  <span class="weui-badge" style="margin-right:10px">预约人数 @ViewData["sum"] 人</span></h4>
+                    <p class="weui-form-preview__value">@Html.Raw(uoi.Order.Describe.Replace("\n", "<br />"))</p>
+                </div>
+            </div>
+                    <p>
+                        <div class="page__bd page__bd_spacing">
+                            @if (@uoi.State == "已预订")
+                            {
+                                <a href="/UserOrderInfoes/Cancel?uid=@uoi.Id" class="weui-btn weui-btn_warn">取消预约</a>
+                            }
+                            else
+                            {
+                                <a href="/UserOrderInfoes/Update?uid=@uoi.Id" class="weui-btn weui-btn_primary">预约</a>
+                            }
+                        </div>
+                    </p>
+                   
+        }
+        else
+        {
+            <div class="weui-panel__bd" style="padding-top:20px;">
+                <div class="weui-media-box weui-media-box_text">
+                    <h4 class="weui-media-box__title">@uname 您好！</h4>
+                    <p class="weui-form-preview__value">你要预约的菜谱为：</p>
+                    <p class="weui-form-preview__value">
+                        @Html.Raw(Model.Describe)
+                    <br /><span class="weui-badge" style="margin-right:10px">当前预约人数 @ViewData["sum"] 人</span>
+                </p>
+            </div>
+        </div>
+                    <p>
+                        <div class="page__bd page__bd_spacing">
+                            <a href="/UserOrderInfoes/Create?uname=@uname&oid=@Model.Id" class="weui-btn weui-btn_primary">预约</a>
+                        </div>
+                    </p>
+                    
+        }
+                    @if(ifAdmin == true) {
+                    <div class="weui-footer weui-footer_fixed-bottom">
+                        <p class="weui-footer__links">
+                            <a href="/Orders/Index" class="weui-footer__link">预约管理</a>
+                        </p>
+                        <p class="weui-footer__text">&nbsp;</p>
+                    </div>
+                    }
+                    else
+                    {
+                        <div class="weui-footer weui-footer_fixed-bottom">
+                            <p class="weui-footer__links">
+                                &nbsp;
+                            </p>
+                            <p class="weui-footer__text">&nbsp;</p>
+                        </div>
+                    }
+
+        
+        
+    </div>
+    </div>

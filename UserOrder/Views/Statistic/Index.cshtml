@@ -1,0 +1,45 @@
+﻿@model IEnumerable<UserOrder.Models.Statistic>
+@using UserOrder.Models;
+
+@{
+    ViewBag.Title = "统计分析";
+    List<Statistic> listsYear = (List<Statistic>)ViewData["listsYear"];
+}
+
+<div class="container" id="container">
+    <div class="page list js_show">
+        <div class="page__hd">
+            <h1 class="page__title">统计分析</h1>
+            <p class="page__desc">查看每段时间的预约数量</p>
+        </div>
+       <div class="page__bd">
+           <div class="weui-cells__title">月度合计</div>
+            <div class="weui-cells">
+                @foreach (var item in Model)
+                {
+                  <div class="weui-cell">
+                       <div class="weui-cell__bd" onclick="location.href='/Statistic/MonthDetails?year=@DateTime.Now.Year&month=@item.Month'">
+                        @if (item.Month < 10) {
+                            String month = "0" + item.Month;
+                            <p>@DateTime.Now.Year 年 @month 月 &nbsp;&nbsp;&nbsp;预约人数 @item.Amount 人次</p>
+                          }else{
+                            <p>@DateTime.Now.Year 年 @item.Month 月 &nbsp;&nbsp;&nbsp;预约人数 @item.Amount 人次</p>
+                          }
+                        </div>
+                </div>
+            }
+            </div>
+            <div class="weui-cells__title">年度合计</div>
+                 <div class="weui-cells">
+                     @foreach (var year in listsYear) {
+                      <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                              <p>@year.Year 年合计： &nbsp;&nbsp;&nbsp;预约人数 @year.Amount 人次</p>
+                            </div>
+                      </div>
+                     }
+                 </div>
+
+       </div>
+    </div>
+</div>

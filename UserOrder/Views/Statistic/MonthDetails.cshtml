@@ -1,0 +1,31 @@
+﻿@model IEnumerable<UserOrder.Models.Order>
+@{
+    ViewBag.Title = "月份预约详情";
+    int year = ViewBag.Year;
+    String  month = ViewBag.Month;
+}
+
+<div class="container" id="container">
+    <div class="page panel js_show">
+        <div class="page__bd">
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-panel__hd">@year 年 @month 月预定详情</div>
+                <div class="weui-panel__bd">
+                    @foreach (var item in Model)
+                    {
+                        <div onclick="location.href='/Orders/Details/@item.Id'" class="weui-media-box weui-media-box_text">
+                            <h4 class="weui-media-box__title">@Html.DisplayFor(modelItem => item.OrderDate)  <span class="weui-badge" style="margin-right:10px">预约人数 @Html.DisplayFor(modelItem => item.Amount) 人</span></h4>
+                            <p>
+                                @Html.Raw(@item.Describe)
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="page__ft" style="padding-bottom:60px"></div>
+
+    </div>
+</div>

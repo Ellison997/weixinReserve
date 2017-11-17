@@ -1,0 +1,70 @@
+﻿@model IEnumerable<UserOrder.Models.Order>
+
+@{
+    ViewBag.Title = "预定";
+    String release = ViewData["release"].ToString();
+}
+<div class="container" id="container">
+    <div class="page panel js_show">       
+        <div class="page__bd">
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-panel__hd">近期菜单 <span style="float:right;padding-right:0px"><a href="\Statistic\Index"> >>统计分析</a></span></div>
+                <div class="weui-panel__bd">
+                    @foreach (var item in Model)
+                    {
+                        <div onclick="location.href='/Orders/Details/@item.Id'" class="weui-media-box weui-media-box_text">                    
+                                <h4 class="weui-media-box__title">@Html.DisplayFor(modelItem => item.OrderDate)  <span class="weui-badge" style="margin-right:10px">预约人数 @Html.DisplayFor(modelItem => item.Amount) 人</span></h4>
+                                <p>
+                                    @Html.Raw(@item.Describe)
+                                </p>                           
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="page__bd page__bd_spacing" style="padding-top:20px">
+            @if (release == "今日已发布")
+            {
+            <a href="#" class="weui-btn weui-btn_primary" id="showAndroidDialog1" onclick="display_alert()">添加预约场次</a>
+             }
+            else
+            {
+                <a href="/orders/Create" class="weui-btn weui-btn_primary">添加预约场次</a>
+            }
+        </div>
+
+
+        <div id="dialogs">
+            <div class="js_dialog" id="androidDialog1" style="display: none;">
+                <div class="weui-mask"></div>
+                <div class="weui-dialog weui-skin_android">
+                    <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+                    <div class="weui-dialog__bd">
+                        您今日已经发布过预约菜谱，还需要再发布吗？
+                    </div>
+                    <div class="weui-dialog__ft">
+                        <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" onclick="display_Out()">取消</a>
+                        <a href="/orders/Create" class="weui-dialog__btn weui-dialog__btn_primary">添加预约</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page__ft" style="padding-bottom:60px"></div>
+
+        
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function display_alert() {        
+        $('#androidDialog1').fadeIn(200);
+    };
+    function display_Out() {
+        $('#androidDialog1').fadeOut(200);
+    };
+        
+</script>

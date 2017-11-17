@@ -1,0 +1,44 @@
+﻿@model UserOrder.Models.Order
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="container" id="container">
+    <div class="page input js_show">
+
+        <form action="/Orders/Edit" method="post" id="editPublish">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+            <div class="page__bd">
+                <div class="weui-cells__title">修改预约场次</div>
+                <div class="weui-cells weui-cells_form">
+
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label for="" class="weui-label">日期</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" name="OrderDate" type="text" value="@Model.OrderDate">
+                        </div>
+                    </div>
+
+
+                    <div class="weui-cells__title">菜谱</div>
+                    <div class="weui-cells weui-cells_form">
+                        <div class="weui-cell">
+                            <div class="weui-cell__bd">
+                                <textarea class="weui-textarea" placeholder="输入您想添加的菜谱" rows="5"  name="Describe">@Model.Describe</textarea>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="page__bd page__bd_spacing" style="padding-top:20px">
+                    <a href="#" onclick="document.getElementById('editPublish').submit();" class="weui-btn weui-btn_primary">更新菜谱</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+

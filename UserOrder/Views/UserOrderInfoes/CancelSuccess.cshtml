@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "CancelSuccess";
+    bool ifAdmin = (bool)Session["ifAdmin"];
+}
+
+<div class="page msg_success js_show" style="padding-top:50px">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">取消成功</h2>
+            <p class="weui-msg__desc">取消预约成功，期待下次为您服务</p>
+        </div>
+
+
+        @if (ifAdmin == true)
+        {
+            <div class="weui-footer weui-footer_fixed-bottom">
+                <p class="weui-footer__links">
+                    <a href="/Orders/Index" class="weui-footer__link">预约管理</a>
+                </p>
+                <p class="weui-footer__text">&nbsp;</p>
+            </div>
+        }
+        else
+        {
+            <div class="weui-footer weui-footer_fixed-bottom">
+                <p class="weui-footer__links">
+                    &nbsp;
+                </p>
+                <p class="weui-footer__text">&nbsp;</p>
+            </div>
+        }
+
+    </div>
+</div>
+

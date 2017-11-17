@@ -1,0 +1,84 @@
+﻿@model IEnumerable<UserOrder.Models.UserOrderInfo>
+@using UserOrder.Models;
+
+@{
+    ViewBag.Title = "预定";
+    var order = (Order)ViewBag._Order;
+}
+
+<div class="container" id="container">
+    <div class="page panel js_show">
+        <div class="page__bd">
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-panel__hd">@Html.DisplayFor(modelItem => order.OrderDate) <span style="float:right;padding-right:0px"><a href="\Orders\Edit\@order.Id"> >>编辑菜单</a></span></div>
+                <div class="weui-panel__bd">
+                    <div class="weui-media-box weui-media-box_text">
+                        <p>
+                            @Html.Raw(@order.Describe)
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-panel__hd" >用户预定列表</div>
+                    @if (Model.Count()>0)
+                    {
+                    <div class="weui-panel__bd">
+                     @foreach (var item in Model)
+                     {
+                        <div class="weui-media-box weui-media-box_text">
+                            <p>
+                                用户名： @Html.DisplayFor(modelItem => item.UName)<br />
+                                状态：
+                                      @if (item.State == "已预订")
+                                      {
+                                            <span style="color:#1aad19;font-weight:bold"> @Html.DisplayFor(modelItem => item.State) </span>
+                                      }
+                                      else
+                                      {
+                                        <span style="color:crimson;font-weight:bold"> @Html.DisplayFor(modelItem => item.State) </span>
+                                      }
+
+                                <br />
+                                预定时间：@Html.DisplayFor(modelItem => item.OrderDateTime) <br />
+                                取消时间：@Html.DisplayFor(modelItem => item.CancelDateTime)
+                            </p>
+                        </div>
+
+                     }
+                    </div>
+                    }
+                    else
+                    {
+                        <div class="page__bd" >
+                            
+                            <div class="weui-loadmore weui-loadmore_line">
+                                <span class="weui-loadmore__tips">暂无人预约</span>
+                            </div>
+                            <div class="weui-loadmore weui-loadmore_line weui-loadmore_dot">
+                                <span class="weui-loadmore__tips"></span>
+                            </div>
+                        </div>
+                    }
+            </div>
+        </div>
+                
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+

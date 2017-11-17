@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "NoRelease";
+   
+
+}
+
+<<div class="page msg_success js_show" style="padding-top:50px">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">预约未发布</h2>
+            <p class="weui-msg__desc">对不起，管理员还未发布此预约</p>
+        </div>
+     
+        @if ((bool)ViewData["ifAdmin"] == true)
+        {
+            <div class="weui-footer weui-footer_fixed-bottom">
+                <p class="weui-footer__links">
+                    <a href="/Orders/Index" class="weui-footer__link">预约管理</a>
+                </p>
+                <p class="weui-footer__text">&nbsp;</p>
+            </div>
+        }
+        else
+        {
+            <div class="weui-footer weui-footer_fixed-bottom">
+                <p class="weui-footer__links">
+                    &nbsp;
+                </p>
+                <p class="weui-footer__text">&nbsp;</p>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+
+
+
