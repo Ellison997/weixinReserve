@@ -10,6 +10,8 @@ namespace UserOrder.Models
         public int Year { set; get; }
         public int Month { set; get; }
         public int Amount { set; get; }
+        public DateTime issuedate { set; get; }
+        public int PeopleN { set; get; }
 
     }
 }

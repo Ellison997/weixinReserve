@@ -18,37 +18,49 @@ namespace UserOrder.Controllers
         {
             List<Statistic> listsMonth = new List<Statistic>();
             //根据月份对数据进行分组
-            listsMonth = (from o in db.OrderSet
-                     join uoi in db.UserOrderInfoSet on o.Id equals uoi.OrderId
-                     where o.OrderDate.Year == DateTime.Now.Year && uoi.State=="已预订"
-                     group o by new
-                     {
-                         o.OrderDate.Month
-                     } into g
-                     orderby g.Key.Month descending
-                     select new Statistic
-                     {
-                         Month = g.Key.Month,
-                         Amount = g.Count(),
-                         
-                     }).ToList();
+            List<Statistic> listsm = (from uoi in db.UserOrderInfoSet
+                                      join o in db.OrderSet on uoi.OrderId equals o.Id
+                                      where o.OrderDate.Year == DateTime.Now.Year && uoi.State == "已预订"
+                                      orderby o.OrderDate.Month descending
+                                      select new Statistic
+                                      {
+                                          Month = o.OrderDate.Month,
+                                          PeopleN=uoi.PeopleNumber
 
+                                      }).ToList();
+            listsMonth = (from lm in listsm
+                          group lm by new
+                          {
+                              lm.Month
+                          } into m
+                          select new Statistic
+                          {
+                              Month = m.Key.Month,
+                              Amount = m.Sum(p => p.PeopleN)
+                          }).ToList();
 
             List<Statistic> listsYear = new List<Statistic>();
-            listsYear = (from o in db.OrderSet
-                         join uoi in db.UserOrderInfoSet on o.Id equals uoi.OrderId
-                         where uoi.State=="已预订"
-                         group o by new
+            List<Statistic> listsy = (from o in db.OrderSet
+                                      join uoi in db.UserOrderInfoSet on o.Id equals uoi.OrderId
+                                      where uoi.State == "已预订"
+                                      orderby o.OrderDate.Year descending
+                                      select new Statistic
+                                      {
+                                          Year = o.OrderDate.Year,
+                                          PeopleN = uoi.PeopleNumber
+
+                                      }).ToList();
+            listsYear = (from ly in listsy
+                         group ly by new
                          {
-                             o.OrderDate.Year
-                         } into g
-                         orderby g.Key.Year descending
+                             ly.Year
+                         } into y
                          select new Statistic
                          {
-                             Year = g.Key.Year,
-                             Amount = g.Count()
-
+                             Year = y.Key.Year,
+                             Amount = y.Sum(py => py.PeopleN)
                          }).ToList();
+
             ViewData["listsYear"] = listsYear;
             Statistic st = listsYear.FirstOrDefault();
             ViewData["yearAmount"] = st.Amount;
@@ -59,11 +71,18 @@ namespace UserOrder.Controllers
         public ActionResult MonthDetails(int year,int month)
         {
             List<Order> listOrder = (from o in db.OrderSet where o.OrderDate.Month == month && o.OrderDate.Year == year orderby o.Id descending select o).ToList();
+            
+
             List<Order> Orders = new List<Order>();
             foreach (Order lo in listOrder)
             {
-                int count = (from uoi in db.UserOrderInfoSet where uoi.OrderId == lo.Id && uoi.State == "已预订" select uoi).Count();
-                lo.Amount = count;
+                List<UserOrderInfo> listUoi = (from uoi in db.UserOrderInfoSet where uoi.OrderId == lo.Id && uoi.State == "已预订" select uoi).ToList();
+                int Amount = 0;
+                foreach (UserOrderInfo uoi in listUoi)
+                {
+                    Amount += uoi.PeopleNumber;
+                }
+                lo.Amount = Amount;
                 lo.Describe = lo.Describe.Replace("\n", "<br />");
 
                 Orders.Add(lo);

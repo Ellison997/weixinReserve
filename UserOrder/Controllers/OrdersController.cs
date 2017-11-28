@@ -22,8 +22,13 @@ namespace UserOrder.Controllers
             List<Order> listOrder = (from o in db.OrderSet orderby o.Id descending select o).Take(5).ToList();
             List<Order> Orders = new List<Order>();
             foreach (Order lo in listOrder) {
-                int count = (from uoi in db.UserOrderInfoSet where  uoi.OrderId==lo.Id && uoi.State=="已预订" select uoi).Count();
-                lo.Amount = count;
+                List<UserOrderInfo> listUoi = (from uoi in db.UserOrderInfoSet where uoi.OrderId == lo.Id && uoi.State == "已预订" select uoi).ToList();
+                int Amount = 0;
+                foreach (UserOrderInfo uoi in listUoi) {
+                    Amount += uoi.PeopleNumber;
+                }
+
+                lo.Amount = Amount;
                 lo.Describe = lo.Describe.Replace("\n", "<br />");
                
                 Orders.Add(lo);
@@ -80,7 +85,7 @@ namespace UserOrder.Controllers
                 db.OrderSet.Add(order);
                 db.SaveChanges();
                 SendMessageController smc = new SendMessageController();
-                String content = "今日菜单：" + order.Describe;
+                String content = order.OrderDate+"菜单：" + order.Describe;
                 String toParty = ConfigurationManager.AppSettings["toParty"];
                 smc.SendTest(content, toParty);
                 return RedirectToAction("Index");

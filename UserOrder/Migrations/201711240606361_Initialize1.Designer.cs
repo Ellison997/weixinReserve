@@ -7,13 +7,13 @@ namespace UserOrder.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initialize : IMigrationMetadata
+    public sealed partial class Initialize1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initialize));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initialize1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710260735420_Initialize"; }
+            get { return "201711240606361_Initialize1"; }
         }
         
         string IMigrationMetadata.Source

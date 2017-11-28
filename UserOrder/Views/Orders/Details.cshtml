@@ -44,7 +44,9 @@
                                       }
 
                                 <br />
-                                预定时间：@Html.DisplayFor(modelItem => item.OrderDateTime) <br />
+                                预定人数：@Html.DisplayFor(modelItem => item.PeopleNumber)<br />   
+                                预定时间：@Html.DisplayFor(modelItem => item.OrderDateTime) <br />                               
+                                修改时间：@Html.DisplayFor(modelItem => item.UpdateDateTime)<br />
                                 取消时间：@Html.DisplayFor(modelItem => item.CancelDateTime)
                             </p>
                         </div>

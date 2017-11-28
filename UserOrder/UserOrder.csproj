@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -219,9 +220,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201710260735420_Initialize.cs" />
-    <Compile Include="Migrations\201710260735420_Initialize.Designer.cs">
-      <DependentUpon>201710260735420_Initialize.cs</DependentUpon>
+    <Compile Include="Migrations\201711240606361_Initialize1.cs" />
+    <Compile Include="Migrations\201711240606361_Initialize1.Designer.cs">
+      <DependentUpon>201711240606361_Initialize1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711240609572_Initialize.cs" />
+    <Compile Include="Migrations\201711240609572_Initialize.Designer.cs">
+      <DependentUpon>201711240609572_Initialize.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -243,6 +248,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\1.png" />
+    <Content Include="images\2.png" />
+    <Content Include="images\3.png" />
+    <Content Include="images\4.png" />
+    <Content Include="images\5.png" />
+    <Content Include="images\6.png" />
+    <Content Include="images\7.png" />
+    <Content Include="images\8.png" />
+    <Content Include="images\9.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -300,6 +314,7 @@
     <Content Include="Views\UserOrderInfoes\Anomaly.cshtml" />
     <Content Include="Views\UserOrderInfoes\CancelSuccess.cshtml" />
     <Content Include="Views\Statistic\MonthDetails.cshtml" />
+    <Content Include="Views\UserOrderInfoes\UpdateNumber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -326,8 +341,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710260735420_Initialize.resx">
-      <DependentUpon>201710260735420_Initialize.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711240606361_Initialize1.resx">
+      <DependentUpon>201711240606361_Initialize1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711240609572_Initialize.resx">
+      <DependentUpon>201711240609572_Initialize.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

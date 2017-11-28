@@ -33,24 +33,44 @@
             }
             <div class="weui-panel__bd">
                 <div class="weui-media-box weui-media-box_text">
-                    <h4 class="weui-media-box__title">@uoi.UName 您好！状态：@uoi.State</h4>
-                    <h4 class="weui-media-box__title">@uoi.Order.OrderDate  <span class="weui-badge" style="margin-right:10px">预约人数 @ViewData["sum"] 人</span></h4>
+                    <h4 class="weui-media-box__title">@uoi.UName 您好！状态：@uoi.State @uoi.PeopleNumber 人</h4>
+                    <h4 class="weui-media-box__title">@uoi.Order.OrderDate  <span class="weui-badge" style="margin-right:10px">总预约人数 @ViewData["sum"] 人</span></h4>
                     <p class="weui-form-preview__value">@Html.Raw(uoi.Order.Describe.Replace("\n", "<br />"))</p>
                 </div>
             </div>
-                    <p>
-                        <div class="page__bd page__bd_spacing">
-                            @if (@uoi.State == "已预订")
-                            {
-                                <a href="/UserOrderInfoes/Cancel?uid=@uoi.Id" class="weui-btn weui-btn_warn">取消预约</a>
-                            }
-                            else
-                            {
-                                <a href="/UserOrderInfoes/Update?uid=@uoi.Id" class="weui-btn weui-btn_primary">预约</a>
-                            }
+            <div>
+
+                @if (@uoi.State == "已预订")
+                {
+                    <div class="weui-btn-area">
+                        <a href="/UserOrderInfoes/UpdateNumber?uid=@uoi.Id" class="weui-btn weui-btn_primary">修改预约人数</a>
+                    </div>
+                    <div class="page__bd page__bd_spacing">
+                        <a href="/UserOrderInfoes/Cancel?uid=@uoi.Id" class="weui-btn weui-btn_warn">取消预约</a>
+                    </div>
+                }
+                else
+                {
+                    <form action="/UserOrderInfoes/Update" method="post" id="Update">
+                        @Html.AntiForgeryToken()
+                        <input name="uid" type="hidden" value="@uoi.Id">
+                        <div class="weui-cells weui-cells_form">
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">预约人数</label></div>
+                                <div class="weui-cell__bd">
+                                    <input id="xinNumber" name="xinNumber" class="weui-input" type="number" pattern="[0-9]*" value="1" placeholder="请输入数字">
+                                </div>
+                            </div>
                         </div>
-                    </p>
-                   
+
+                        <div class="weui-btn-area">
+                            <a href="#" onclick="xinn();" class="weui-btn weui-btn_primary">新预约</a>
+                        </div>
+                    </form>
+                }
+
+</div>
+
         }
         else
         {
@@ -60,36 +80,207 @@
                     <p class="weui-form-preview__value">你要预约的菜谱为：</p>
                     <p class="weui-form-preview__value">
                         @Html.Raw(Model.Describe)
-                    <br /><span class="weui-badge" style="margin-right:10px">当前预约人数 @ViewData["sum"] 人</span>
+                        <br /><span class="weui-badge" style="margin-right:10px">当前预约人数 @ViewData["sum"] 人</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="weui-grids">
+                <a onclick="sss(1)" href="javascript:;" class="weui-grid" id="opt1">
+                    <div class="weui-grid__icon" >
+                        <p class="weui-grid__label">1</p>
+                    </div>
+                </a>
+                <a onclick="sss(2)"  class="weui-grid" id="opt2">
+                    <div class="weui-grid__icon" >
+                        <p class="weui-grid__label">2</p>
+                    </div>
+                </a>
+                <a onclick="sss(3)"class="weui-grid"  id="opt3">
+                    <div class="weui-grid__icon">
+                        <p class="weui-grid__label">3</p>
+                    </div>
+                </a>
+                <a onclick="sss(4)" class="weui-grid" id="opt4">
+                    <div class="weui-grid__icon" >
+                        <p class="weui-grid__label">4</p>
+                    </div>
+                </a>
+                <a onclick="sss(5)" href="javascript:;" class="weui-grid" id="opt5">
+                    <div class="weui-grid__icon" >
+                        <p class="weui-grid__label">5</p>
+                    </div>
+                </a>
+                <a onclick="sss(6)" href="javascript:;" class="weui-grid" id="opt6">
+                    <div class="weui-grid__icon" >
+                        <p class="weui-grid__label">6</p>
+                    </div>
+                </a>
+                <a onclick="sss(7)" href="javascript:;" class="weui-grid" id="opt7">
+                    <div class="weui-grid__icon" >
+                        <p class="weui-grid__label">7</p>
+                    </div>
+                </a>
+                <a onclick="sss(8)" href="javascript:;" class="weui-grid"  id="opt8">
+                    <div class="weui-grid__icon">
+                        <p class="weui-grid__label">8</p>
+                    </div>
+                    <!-- <p class="weui-grid__label">8</p> -->
+                </a>
+                <a onclick="sss(9)" href="javascript:;" class="weui-grid"  id="opt9">
+                    <div class="weui-grid__icon">
+                        <p class="weui-grid__label">9</p>
+                      <!-- <div class="fillet" id="opt9">9</div> -->
+                    </div>
+                    <!-- <p class="weui-grid__label">8</p> -->
+                </a>
+            </div>
+
+            <form action="/UserOrderInfoes/Create" method="post" id="addUserOrder">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => Model.Id)
+                @Html.HiddenFor(model => uname)
+                <div class="weui-cells weui-cells_form">
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">预约人数</label></div>
+                        <div class="weui-cell__bd">
+                            <input id="inputNumber" name="pNumber" class="weui-input" type="number"  value="1" pattern="[0-9]*" placeholder="请输入数字">
+                        </div>
+                    </div>
+                </div>  
+
+                <div class="weui-btn-area">
+                    <a href="#" onclick="onen()" class="weui-btn weui-btn_primary">预约</a>
+                </div>
+            </form>
+
+
+        }
+        @if (ifAdmin == true)
+        {
+            <div class="weui-footer weui-footer_fixed-bottom">
+                <p class="weui-footer__links">
+                    <a href="/Orders/Index" class="weui-footer__link">预约管理</a>
                 </p>
+                <p class="weui-footer__text">&nbsp;</p>
+            </div>
+            }
+            else
+            {
+               <div class="page__ft">
+                    <div class="weui-footer weui-footer_fixed-bottom">
+                    <p class="weui-footer__links">
+                        &nbsp;
+                    </p>
+                    <p class="weui-footer__text">&nbsp;</p>
+                    </div>
+                </div>
+           
+        }
+
+
+        <div id="dialogs">
+            <div class="js_dialog" id="androidDialog1" style="display: none;">
+                <div class="weui-mask"></div>
+                <div class="weui-dialog weui-skin_android">
+                    <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+                    <div class="weui-dialog__bd">
+                        你输入的预约人数不正确，请重新选择或输入！
+                    </div>
+                    <div class="weui-dialog__ft">
+                        <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" onclick="display_Out()">确定</a>
+                        
+                    </div>
+                </div>
             </div>
         </div>
-                    <p>
-                        <div class="page__bd page__bd_spacing">
-                            <a href="/UserOrderInfoes/Create?uname=@uname&oid=@Model.Id" class="weui-btn weui-btn_primary">预约</a>
-                        </div>
-                    </p>
-                    
-        }
-                    @if(ifAdmin == true) {
-                    <div class="weui-footer weui-footer_fixed-bottom">
-                        <p class="weui-footer__links">
-                            <a href="/Orders/Index" class="weui-footer__link">预约管理</a>
-                        </p>
-                        <p class="weui-footer__text">&nbsp;</p>
-                    </div>
-                    }
-                    else
-                    {
-                        <div class="weui-footer weui-footer_fixed-bottom">
-                            <p class="weui-footer__links">
-                                &nbsp;
-                            </p>
-                            <p class="weui-footer__text">&nbsp;</p>
-                        </div>
-                    }
 
-        
-        
     </div>
-    </div>
+</div>
+
+<style type="text/css">
+    .weui-grid {
+        width: 33.3333333333333333333333%;
+        height: 60px;
+        padding: 5px 0px;
+        text-align: center;
+        
+    }
+    .weui-grid__label {
+        font-size: 32px;
+    }
+    
+    
+    .fillet {
+        height: 25px;
+        width: 25px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        background: #09BB07;
+    }
+    .weui-grid__icon {
+        height: 32px;
+        width: 32px;
+        
+    }
+    .weui-media-box__title {
+        font-weight: bold;
+    }
+    .weui-footer_fixed-bottom {
+        position: relative;
+        top: 40px;
+    }
+   
+    .weui-panel__bd {
+        padding-top: 6px !important;
+    }
+</style>
+
+<script type="text/javascript">
+    window.onload = function () {
+        setInterval("clock()", 100)
+    }
+
+    function sss(num) {
+        var opt = document.getElementById('inputNumber');
+        for (var i = 1; i <= 9;i++){
+            document.getElementById('opt' + i).style.backgroundColor = "";
+        }
+        document.getElementById('opt' + num).style.backgroundColor = "#09BB07";
+        opt.value = num;      
+    }
+    
+    function clock() {
+        var number = document.getElementById('inputNumber').value;
+        if (number != null) {
+            for (var i = 1; i <= 9; i++) {
+                document.getElementById('opt' + i).style.backgroundColor = "";
+            }
+            document.getElementById('opt' + number).style.backgroundColor = "#09BB07";
+        }
+    }
+    function xinn() {
+        var xinnu = document.getElementById('xinNumber').value;
+        if (xinnu <= 0) {
+            display_alert();
+        }else{
+            document.getElementById('Update').submit();
+        }
+    }
+
+    function onen() {
+        var onenu = document.getElementById('inputNumber').value;
+        if (onenu <= 0) {
+            display_alert();
+        } else {
+            document.getElementById('addUserOrder').submit();
+        }
+    }
+
+    function display_alert() {
+        $('#androidDialog1').fadeIn(200);
+    };
+    function display_Out() {
+        $('#androidDialog1').fadeOut(200);
+    };
+</script>

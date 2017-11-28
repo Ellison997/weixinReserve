@@ -78,19 +78,20 @@ namespace UserOrder.Controllers
         [Route("Index")]
         public ActionResult Index()
         {
+            
             Order order = null;
             int sum = 0;
             ViewData["uoi"] = null;
             String uname = (String)Session["uname"];
 
+
             //判断当前用户是否为管理员
+            
             List<string> names = GetStaffs();
             ifAdmin = names.Contains(uname);
             ViewData["ifAdmin"] = ifAdmin;
             Session["ifAdmin"] = ifAdmin;
-
-
-
+           
             //判断今日商家是否发布预定            
             int dateSum = (from od in db.OrderSet where od.OrderDate >= Tooday && od.OrderDate < Enday select od).Count();
             if (dateSum != 0)
@@ -98,7 +99,11 @@ namespace UserOrder.Controllers
                 //获取到今日最新的菜单
                 order = GetNewestOrder();
                 order.Describe = order.Describe.Replace("\n", "<br />");
-                sum = (from usi in db.UserOrderInfoSet where usi.OrderId == order.Id && usi.State == "已预订" select usi).Count();
+                List<UserOrderInfo> listUoi = (from usi in db.UserOrderInfoSet where usi.OrderId == order.Id && usi.State == "已预订" select usi).ToList();
+                foreach (UserOrderInfo uoi in listUoi)
+                {
+                    sum += uoi.PeopleNumber;
+                }
             }
             else
             {
@@ -110,8 +115,13 @@ namespace UserOrder.Controllers
             int count = uois.Count();
             if (count > 0)
             {
-                UserOrderInfo uoi = uois.FirstOrDefault();                
-                sum = (from usi in db.UserOrderInfoSet where usi.OrderId == uoi.OrderId && usi.State == "已预订" select usi).Count();
+                sum = 0;
+                UserOrderInfo uoi = uois.FirstOrDefault();
+                List<UserOrderInfo> list = (from usi in db.UserOrderInfoSet where usi.OrderId == uoi.OrderId && usi.State == "已预订" select usi).ToList();
+                foreach (UserOrderInfo uoiy in list)
+                {
+                    sum += uoiy.PeopleNumber;
+                }
                 ViewData["uoi"] = uoi;
             }
                 ViewData["sum"] = sum;
@@ -121,12 +131,15 @@ namespace UserOrder.Controllers
 
             return View(order);
         }
-        
 
+       
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("Create")]
-        public ActionResult Create(String uname,int oid)
-        {
-            IQueryable<UserOrderInfo> uois = db.UserOrderInfoSet.Where(o => o.UName == uname && o.OrderId==oid);
+        public ActionResult Create(int Id,String uname,int pNumber)
+        { 
+            IQueryable<UserOrderInfo> uois = db.UserOrderInfoSet.Where(o => o.UName == uname && o.OrderId==Id);
 
             if (uois.Count() > 0)
             {
@@ -136,7 +149,8 @@ namespace UserOrder.Controllers
             {
                 UserOrderInfo uoi = new UserOrderInfo();
                 uoi.UName = uname;
-                uoi.OrderId = oid;
+                uoi.OrderId = Id;
+                uoi.PeopleNumber = pNumber;
                 uoi.OrderDateTime = DateTime.Now;
                 uoi.State = "已预订";
 
@@ -144,14 +158,16 @@ namespace UserOrder.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            
          }
 
         [Route("Update")]
-        public ActionResult Update(int uid)
+        public ActionResult Update(int uid, int xinNumber)
         {
 
                 UserOrderInfo uoii = db.UserOrderInfoSet.Find(uid);
                 uoii.State = "已预订";
+                uoii.PeopleNumber = xinNumber;
                 uoii.OrderDateTime = DateTime.Now;
 
                 db.Entry(uoii).State = EntityState.Modified;
@@ -172,6 +188,35 @@ namespace UserOrder.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        //修改预约人数
+        [Route("UpdateNumber")]
+        public ActionResult UpdateNumber(int uid)
+        {
+            UserOrderInfo uoii = db.UserOrderInfoSet.Find(uid);
+
+            return View(uoii);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("UpdatePeopleNumber")]
+        public ActionResult UpdatePeopleNumber(int Id,int pNumber)
+        {
+            UserOrderInfo uoii = db.UserOrderInfoSet.Find(Id);
+            uoii.PeopleNumber = pNumber;
+            uoii.UpdateDateTime = DateTime.Now;
+
+            db.Entry(uoii).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+            
+
+        }
+
+
+
 
         // GET: orders/MsgSuccess 预定成功页
         private ActionResult MsgSuccess()

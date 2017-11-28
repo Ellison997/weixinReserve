@@ -1,0 +1,191 @@
+﻿@model UserOrder.Models.UserOrderInfo
+
+@{
+    ViewBag.Title = "修改预订人数";
+}
+
+<div class="container" id="container">
+    <div class="page panel js_show">
+        <div class="weui-panel__bd" style="padding-top:20px;">
+            <div class="weui-media-box weui-media-box_text">
+                <h4 class="weui-media-box__title">@Model.UName 您好！</h4>
+                <p class="weui-form-preview__value">你预约的菜谱为：</p>
+                <p class="weui-form-preview__value">
+                    @Html.Raw(Model.Order.Describe.Replace("\n", "<br />"))
+                    <br /><span class="weui-badge" style="margin-right:10px">您当前预约 @Model.PeopleNumber 人</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="weui-grids">
+            <a onclick="sss(1)" href="javascript:;" class="weui-grid" id="opt1">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">1</p>
+                </div>
+            </a>
+            <a onclick="sss(2)" class="weui-grid" id="opt2">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">2</p>
+                </div>
+            </a>
+            <a onclick="sss(3)" class="weui-grid" id="opt3">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">3</p>
+                </div>
+            </a>
+            <a onclick="sss(4)" class="weui-grid" id="opt4">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">4</p>
+                </div>
+            </a>
+            <a onclick="sss(5)" href="javascript:;" class="weui-grid" id="opt5">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">5</p>
+                </div>
+            </a>
+            <a onclick="sss(6)" href="javascript:;" class="weui-grid" id="opt6">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">6</p>
+                </div>
+            </a>
+            <a onclick="sss(7)" href="javascript:;" class="weui-grid" id="opt7">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">7</p>
+                </div>
+            </a>
+            <a onclick="sss(8)" href="javascript:;" class="weui-grid" id="opt8">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">8</p>
+                </div>
+                <!-- <p class="weui-grid__label">8</p> -->
+            </a>
+            <a onclick="sss(9)" href="javascript:;" class="weui-grid" id="opt9">
+                <div class="weui-grid__icon">
+                    <p class="weui-grid__label">9</p>
+                    <!-- <div class="fillet" id="opt9">9</div> -->
+                </div>
+                <!-- <p class="weui-grid__label">8</p> -->
+            </a>
+        </div>
+
+        <form action="/UserOrderInfoes/UpdatePeopleNumber" method="post" id="updateUserOrder">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => Model.Id)
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">预约人数</label></div>
+                    <div class="weui-cell__bd">
+                        <input id="inputNumber" name="pNumber" value="@Model.PeopleNumber" class="weui-input" type="number"  pattern="[0-9]*" placeholder="请输入数字">
+                    </div>
+                </div>
+            </div>  
+
+            <div class="weui-btn-area">
+                <a href="#" onclick="verify();" class="weui-btn weui-btn_primary">更新预约信息</a>
+            </div>
+        </form>
+        <div class="page__ft">
+            <div class="weui-footer weui-footer_fixed-bottom">
+                <p class="weui-footer__links">
+                    &nbsp;
+                </p>
+                <p class="weui-footer__text">&nbsp;</p>
+            </div>
+        </div>
+
+        <div id="dialogs">
+            <div class="js_dialog" id="androidDialog1" style="display: none;">
+                <div class="weui-mask"></div>
+                <div class="weui-dialog weui-skin_android">
+                    <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+                    <div class="weui-dialog__bd">
+                        你输入的预约人数不正确，请重新选择或输入！
+                    </div>
+                    <div class="weui-dialog__ft">
+                        <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" onclick="display_Out()">确定</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style type="text/css">
+    .weui-grid {
+        width: 33.3333333333333333333333%;
+        height: 60px;
+        padding: 5px 0px;
+        text-align: center;
+    }
+
+    .weui-grid__label {
+        font-size: 32px;
+    }
+
+
+    .fillet {
+        height: 25px;
+        width: 25px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        background: #09BB07;
+    }
+
+    .weui-grid__icon {
+        height: 32px;
+        width: 32px;
+    }
+    .weui-media-box__title {
+        font-weight: bold;
+    }
+    .weui-footer_fixed-bottom {
+        position: relative;
+        top: 60px;
+    }
+
+    .weui-panel__bd {
+        padding-top: 6px !important;
+    }
+</style>
+
+<script type="text/javascript">
+    window.onload = function () {
+        setInterval("clock()", 100)
+    }
+
+    function sss(num) {
+        var opt = document.getElementById('inputNumber');
+        for (var i = 1; i <= 9; i++) {
+            document.getElementById('opt' + i).style.backgroundColor = "";
+        }
+        document.getElementById('opt' + num).style.backgroundColor = "#09BB07";
+        opt.value = num;
+    }
+
+    function clock() {
+        var number = document.getElementById('inputNumber').value;
+        if (number != null) {
+            for (var i = 1; i <= 9; i++) {
+                document.getElementById('opt' + i).style.backgroundColor = "";
+            }
+            document.getElementById('opt' + number).style.backgroundColor = "#09BB07";
+        }
+    }
+    function verify() {
+        var number = document.getElementById('inputNumber').value;
+        if (number <= 0) {
+            display_alert();
+        }else{ 
+        document.getElementById('updateUserOrder').submit();
+        }
+    }
+    function display_alert() {
+        $('#androidDialog1').fadeIn(200);
+    };
+    function display_Out() {
+        $('#androidDialog1').fadeOut(200);
+    };
+
+</script>
